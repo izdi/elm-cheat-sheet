@@ -1,5 +1,5 @@
 # <img src="http://elm-lang.org/logo.svg" width="26"> Elm Cheat Sheet
-__...Still in development
+_...Still in development_
 
 ## Table of Contents
 1. [Hello World](#hello-world)
