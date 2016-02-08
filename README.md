@@ -2,35 +2,40 @@
 
 ## Table of Contents
 1. [Hello World](#hello-world)
-2. [Tools](#tools)
+2. [Comments](#comments)
+3. [Modules](#modules)
+    * [Imports](#imports)
+4. [Tools](#tools)
     * [REPL](#repl)
     * [Compile](#compile)
     * [Packaging](#packaging)
     * [Publish](#publish)
-3. [Modules](#modules)
-    * [Imports](#imports)
-4. [HTML Embedding](#html-embedding)
-5. [Primitives](#primitives)
+5. [HTML Embedding](#html-embedding)
+6. [Primitives](#primitives)
     * [Numbers](#numbers)
     * [Strings](#strings)
     * [Booleans](#booleans)
     * [Other](#other)
-6. [Collections](#collections)
+7. [Collections](#collections)
     * [Lists](#lists)
     * [Tuples](#tuples)
     * [Records](#records)
-7. [Functions](#functions)
+8. [Functions](#functions)
     * [Anonymous](#anonymous)
-8. [Type Annotation](#type-annotation)
-9. [Operators](#operators)
+    * [Infix](#infix)
+    * [Prefix](#prefix)
+9. [Type Annotation](#type-annotation)
+10. [Operators](#operators)
     * [Arithmetic](#arithmetic)
     * [Bitwise](#bitwise)
     * [Comparison](#comparison)
     * [Logical](#logical)
     * [Function Composition](#function-composition)
     * [Other](#other)
-10. [Control Statements](#control-statements)
-    * [If](#if)     
+11. [Control Statements](#control-statements)
+    * [If](#if)    
+    * [Case-of](#case-of)
+    * [Let-in](#let-in)
 
 ## Elm in a nutshell
  - purely functional language
@@ -49,9 +54,53 @@ File `HelloWorld.elm`:
 import Html exposing (h1, text)
 import Html.Attributes exposing (id)
 
+-- Hello world example
 main =
   h1 [id "hw"] [text "Hello World!"]
 ```
+
+## Comments
+```elm
+-- Single line comment
+
+{-
+Multi-line comment  
+-}
+```
+
+## Modules
+```elm
+-- Defining a module, exports everything by default
+module Mymodule where
+
+-- Export only specified entities
+module Mymodule (Type, value) where
+
+-- Export all or specific states of type
+module Mymodule 
+    ( Error(Forbidden, Timeout)
+    , Stuff(..)
+    ) where
+    
+type Error
+    = Forbidden String
+    | Timeout String
+    | NotFound String
+```
+
+#### Imports
+```elm
+-- qualified imports
+import String                       -- String.toUpper, String.repeat
+import String as Str                -- Str.toUpper, Str.repeat
+
+-- unqualified imports
+import Mymodule exposing (..)                 -- Error, Stuff
+import Mymodule exposing ( Error )            -- Error
+import Mymodule exposing ( Error(..) )        -- Error, Forbidden, Timeout
+import Mymodule exposing ( Error(Forbidden) ) -- Error, Forbidden
+```
+
 
 ## Tools
 #### REPL
@@ -66,6 +115,8 @@ Get function signature
 ```elm
 > List.map
 <function> : (a -> b) -> List a -> List b
+> (++)
+<function> : appendable -> appendable -> appendable
 ```
 
 Elm expressions return resulting value and type
@@ -142,39 +193,6 @@ elm-package publish
 Update a package
 ```bash
 elm-package bump
-```
-
-## Modules
-```elm
--- Defining a module, exports everything by default
-module Mymodule where
-
--- Export only specified entities
-module Mymodule (Type, value) where
-
--- Export all or specific states of type
-module Mymodule 
-    ( Error(Forbidden, Timeout)
-    , Stuff(..)
-    ) where
-    
-type Error
-    = Forbidden String
-    | Timeout String
-    | NotFound String
-```
-
-#### Imports
-```elm
--- qualified imports
-import String                       -- String.toUpper, String.repeat
-import String as Str                -- Str.toUpper, Str.repeat
-
--- unqualified imports
-import Mymodule exposing (..)                 -- Error, Stuff
-import Mymodule exposing ( Error )            -- Error
-import Mymodule exposing ( Error(..) )        -- Error, Forbidden, Timeout
-import Mymodule exposing ( Error(Forbidden) ) -- Error, Forbidden
 ```
 
 ## HTML Embedding
@@ -300,15 +318,19 @@ myRecord =
    number = 1, 
    isCool = True 
  }
+```
 
--- Accessing records
+Accessing records
+```elm
 > myRecord.style
 "Blue" : String
 > .style myRecord
 "Blue" : String
+```
 
--- Updating records returns a new record
-> updatedRecord = { myRecord | style = "Red" }
+Updating records returns a new record
+```elm
+> updatedRecord = { myRecord | style = "Red", number = 10, isCool = False }
 > myRecord.style
 "Blue" : String
 > updatedRecord.style
@@ -316,12 +338,18 @@ myRecord =
 ```
 
 ## Functions
-All functions in Elm are curried by default.
-The function arguments are separated from the function name by a single space. 
-And function arguments are separated by a single space, too.
+Basics
 ```elm
 -- function name | arguments names = function body
 sum a b = a + b
+```
+
+All functions in Elm are _curried_ by default.<br/>
+If you have a function of 2 arguments, it takes one argument and returns a function that takes another argument:
+```elm
+-- Both are equal
+myFunction arg1 arg2
+((myFunction arg1) arg2)
 
 -- Partial application
 > minus x y = (-) x y
@@ -333,14 +361,45 @@ sum a b = a + b
 ```
 
 #### Anonymous
+Also known as lambdas
 ```elm
--- function arguments -> function body
+-- (\function arguments -> function body)
+-- parenthesized, content starts with backslash
 (\n -> n < 0)
 (\x y -> x * y)
 ```
 
+#### Infix
+Functions that placed in front of arguments while enclosed in parentheses are called _infix_
+```elm
+-- Normally you would do this
+> "abcde" ++ "fghij"
+"abcdefghij" : String
+
+-- Infix 
+> (++) "abcde" "fghij"
+"abcdefghij" : String
+```
+
+#### Prefix
+Functions that placed between two arguments and enclosed in backticks `\`` are called _prefix_
+```elm
+-- Normal
+> min 1 2
+1 : number
+
+-- Prefix
+> 1 `min` 2
+1 : number
+```
+
+## Union Types
+```elm
+type Movement = Right | Left | Stop 
+```
+
 ## Type Annotation
-Elm, like most ML dialects, automatically infers most types.
+Elm, like most ML dialects, automatically infers most types.<br/>
 ```elm
 -- function name : 1st arg type -> 2nd arg type -> return type
 fnc : Int -> List -> Int
@@ -348,6 +407,27 @@ fnc : Int -> List -> Int
 Example below is read as function that takes an __a__ value and returns a __b__ value, list of __a__ values returns a list of __b__ values
 ```elm
 map: (a -> b) -> List a -> List b
+```
+
+Pattern matching on record fields
+```elm
+-- Requires the argument has an x and y fields
+multiply {x,y} =
+    x * y
+```
+
+Annotating records
+```elm
+coordinates : { x : Float, y : Float }
+coordinates = 
+    { x = 0,
+      y = 0
+    }    
+```
+
+## Type Aliases
+```elm
+
 ```
 
 ## Operators
@@ -427,4 +507,8 @@ The condition must evaluate to True or False, and nothing else.
 - TYPE MISMATCH --
 ```
 
+#### Case-of
+
+
+#### Let-in
 
