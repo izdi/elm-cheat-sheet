@@ -1,5 +1,4 @@
 # <img src="http://elm-lang.org/logo.svg" width="26"> Elm Cheat Sheet
-_...Still in development_
 
 ## Table of Contents
 1. [Hello World](#hello-world)
@@ -22,7 +21,6 @@ _...Still in development_
     * [Records](#records)
 7. [Functions](#functions)
     * [Anonymous](#anonymous)
-    * [Infix](#infix)
 8. [Type Annotation](#type-annotation)
 9. [Operators](#operators)
     * [Arithmetic](#arithmetic)
@@ -32,8 +30,7 @@ _...Still in development_
     * [Function Composition](#function-composition)
     * [Other](#other)
 10. [Control Statements](#control-statements)
-    * [If](#if)    
-    * [Case-of](#case-of)    
+    * [If](#if)     
 
 ## Elm in a nutshell
  - purely functional language
@@ -133,9 +130,19 @@ Versioning matters.<br/>
 * `source-directories` - array of directories to look up for project source code inside the working directory
 * `exposed-modules` - array of directories to expose publishing modules that are not meant for users
 
-
-
 Publishing a package requires well documented code.
+
+```bash
+git tag -a 1.0.0 -m "initial release"
+git push --tags
+
+elm-package publish
+```
+
+Update a package
+```bash
+elm-package bump
+```
 
 ## Modules
 ```elm
@@ -171,7 +178,28 @@ import Mymodule exposing ( Error(Forbidden) ) -- Error, Forbidden
 ```
 
 ## HTML Embedding
-```elm
+Running fullscreen
+`elm-make HelloWorld.elm` -> `elm.js`
+```html
+<script type="text/javascript" src="elm.js"></script>
+<script type="text/javascript">
+    Elm.fullscreen(Elm.HelloWorld);
+</script>
+```
+
+Embed explicitly in a html element
+```html
+<script type="text/javascript" src="elm.js"></script>
+<script type="text/javascript">
+    var elmHolder = document.getElementById('hw-wrapper');
+    
+    Elm.embed(Elm.HelloWorld, elmHolder);
+</script>
+```
+
+Run without graphics
+```javascript
+Elm.worker(Elm.HelloWorld);
 ```
 
 ## Primitives
@@ -311,8 +339,6 @@ sum a b = a + b
 (\x y -> x * y)
 ```
 
-#### Infix
-
 ## Type Annotation
 Elm, like most ML dialects, automatically infers most types.
 ```elm
@@ -323,9 +349,6 @@ Example below is read as function that takes an __a__ value and returns a __b__ 
 ```elm
 map: (a -> b) -> List a -> List b
 ```
-
-## Type Aliases
-
 
 ## Operators
 In a nutshell Elm operators are _functions_.
@@ -403,9 +426,5 @@ The condition must evaluate to True or False, and nothing else.
 > if 1 then "nope" else "nope again"
 - TYPE MISMATCH --
 ```
-
-#### Case-of
-
-
 
 
