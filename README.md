@@ -345,6 +345,9 @@ Basics
 ```elm
 -- function name | arguments names = function body
 sum a b = a + b
+
+-- combine arguments in a tuple
+sum (a, b) = a + b
 ```
 
 All functions in Elm are _curried_ by default.<br/>
@@ -512,7 +515,34 @@ The condition must evaluate to True or False, and nothing else.
 ```
 
 #### Case-of
+Case tries to match the value of type against patterns defined after the `of` keyword
+```elm
+type User
+    = Activated
+    | Deleted
 
+update state user =
+  case state of
+    Activated ->
+      -- do something with user
+    Deleted ->
+      "Deleted"
+```
 
 #### Let-in
+`let` allows you to define intermediate values.
+```elm
+let
+  x = 3 * 8
+  y = 4 ^ 2
+in
+  x + y
+```
 
+`let` helps simplify complex expressions
+```elm
+let
+  activeUsers = List.filter (\u -> u.state /= 1) model.users
+in
+  { model | user = activeUsers}
+```
