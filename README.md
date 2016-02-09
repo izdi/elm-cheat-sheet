@@ -370,27 +370,27 @@ Also known as _lambdas_
 ```
 
 #### Infix
-Functions that placed in front of arguments while enclosed in parentheses are called _infix_
-```elm
--- Normally you would do this
-> "abcde" ++ "fghij"
-"abcdefghij" : String
-
--- Infix 
-> (++) "abcde" "fghij"
-"abcdefghij" : String
-```
-
-#### Prefix
-Functions that placed between two arguments and enclosed in backticks <code>`</code> are called _prefix_
+Functions that placed between two arguments and enclosed in backticks <code>`</code> are called _infix_ 
 ```elm
 -- Normal
 > min 1 2
 1 : number
 
--- Prefix
+-- Infix
 > 1 `min` 2
 1 : number
+```
+
+#### Prefix
+Functions that placed in front of arguments while enclosed in parentheses are called _prefix_
+```elm
+-- Normally you would do this
+> "abcde" ++ "fghij"
+"abcdefghij" : String
+
+-- Prefix 
+> (++) "abcde" "fghij"
+"abcdefghij" : String
 ```
 
 ## Union Types
@@ -412,7 +412,7 @@ map: (a -> b) -> List a -> List b
 
 Pattern matching on record fields
 ```elm
--- Requires the argument has an x and y fields
+-- Requires the argument with x and y fields
 multiply {x,y} =
     x * y
 ```
