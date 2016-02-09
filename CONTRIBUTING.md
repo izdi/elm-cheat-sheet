@@ -9,6 +9,4 @@
 ## Styling
 
 - Use `##` headers for your sections.
-- Also use `####` for categories (these should group together relevant sections) and `####` for subcategories.
-- Add a link to your section/category to the contents section (use relative links).
-- Make sure to include examples.
+- Also use `####` for categories
