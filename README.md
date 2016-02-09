@@ -361,7 +361,7 @@ myFunction arg1 arg2
 ```
 
 #### Anonymous
-Also known as lambdas
+Also known as _lambdas_
 ```elm
 -- (\function arguments -> function body)
 -- parenthesized, content starts with backslash
@@ -370,19 +370,7 @@ Also known as lambdas
 ```
 
 #### Infix
-Functions that placed in front of arguments while enclosed in parentheses are called _infix_
-```elm
--- Normally you would do this
-> "abcde" ++ "fghij"
-"abcdefghij" : String
-
--- Infix 
-> (++) "abcde" "fghij"
-"abcdefghij" : String
-```
-
-#### Prefix
-Functions that placed between two arguments and enclosed in backticks `\`` are called _prefix_
+Functions that placed between two arguments and enclosed in backticks <code>`</code> are called _infix_ 
 ```elm
 -- Normal
 > min 1 2
@@ -393,7 +381,20 @@ Functions that placed between two arguments and enclosed in backticks `\`` are c
 1 : number
 ```
 
+#### Prefix
+Functions that placed in front of arguments while enclosed in parentheses are called _prefix_
+```elm
+-- Normally you would do this
+> "abcde" ++ "fghij"
+"abcdefghij" : String
+
+-- Infix 
+> (++) "abcde" "fghij"
+"abcdefghij" : String
+```
+
 ## Union Types
+Custom types
 ```elm
 type Movement = Right | Left | Stop 
 ```
