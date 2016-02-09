@@ -142,6 +142,9 @@ elm make HelloWorld.elm -> elm.js
 # Custom name
 $ elm make HelloWorld.elm --output hw.js
 
+# Custom name and multiple files
+$ elm make HelloWorld.elm MyModule.elm --output hw.js
+
 # With warnings
 $ elm make HelloWorld.elm --warn
 
