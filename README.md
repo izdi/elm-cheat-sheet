@@ -412,7 +412,7 @@ map: (a -> b) -> List a -> List b
 
 Pattern matching on record fields
 ```elm
--- Requires the argument has an x and y fields
+-- Requires the argument with x and y fields
 multiply {x,y} =
     x * y
 ```
