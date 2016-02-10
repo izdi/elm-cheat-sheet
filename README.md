@@ -24,15 +24,18 @@
     * [Anonymous](#anonymous)
     * [Infix](#infix)
     * [Prefix](#prefix)
-9. [Type Annotation](#type-annotation)
-10. [Operators](#operators)
+9. [Union Types](#union-types)
+    * [Maybe](#maybe)
+10. [Type Annotation](#type-annotation)
+11. [Type Aliases](#type-aliases)
+12. [Operators](#operators)
     * [Arithmetic](#arithmetic)
     * [Bitwise](#bitwise)
     * [Comparison](#comparison)
     * [Logical](#logical)
     * [Function Composition](#function-composition)
     * [Other](#other)
-11. [Control Statements](#control-statements)
+13. [Control Statements](#control-statements)
     * [If](#if)    
     * [Case-of](#case-of)
     * [Let-in](#let-in)
@@ -142,7 +145,7 @@ elm make HelloWorld.elm -> elm.js
 # Custom name
 $ elm make HelloWorld.elm --output hw.js
 
-# Custom name and multiple files
+# Multiple files
 $ elm make HelloWorld.elm MyModule.elm --output hw.js
 
 # With warnings
@@ -187,15 +190,15 @@ Versioning matters.<br/>
 Publishing a package requires well documented code.
 
 ```bash
-git tag -a 1.0.0 -m "initial release"
-git push --tags
+$ git tag -a 1.0.0 -m "initial release"
+$ git push --tags
 
-elm-package publish
+$ elm-package publish
 ```
 
 Update a package
 ```bash
-elm-package bump
+$ elm-package bump
 ```
 
 ## HTML Embedding
@@ -400,9 +403,42 @@ Functions that placed in front of arguments while enclosed in parentheses are ca
 ```
 
 ## Union Types
-Custom types
+Elm allows to create custom types known as _union types_.<br/>
+The expression below creates a type which can have one of the values (or _tags_) from the right. _Union types_ tightly coupled with [case-of](#case-of) statement.
 ```elm
 type Movement = Right | Left | Stop 
+```
+
+Tags bring additional information
+```elm
+type Movement 
+    = Right Int 
+    | Left Int
+    | Stop Bool
+    | Coordinates (Float, Float)
+    
+-- passing to the function
+myFunction ( Coordinates (45.7, 67.5) )
+```
+
+#### Maybe
+A `Maybe` can help you with optional arguments, error handling, and records with optional fields. Think of it as a kind of`null`
+```elm
+-- Maybe resides in a module
+import Maybe exposing ( Maybe(..) )
+
+-- Takes an argument that can be filled with any value
+type Maybe a = Just a | Nothing
+```
+
+[Type annotation](#type-annotation) explicitly tells that it will give back an `Int` or it won't.
+```elm
+getId : Int -> Maybe Int
+getId id =
+  if id >= 0 then
+    Just id
+  else
+    Nothing
 ```
 
 ## Type Annotation
@@ -521,12 +557,29 @@ type User
     = Activated
     | Deleted
 
-update state user =
+update state =
   case state of
     Activated ->
-      -- do something with user
+      -- do something
     Deleted ->
-      "Deleted"
+      -- do again
+```
+
+In case of passing tags with additional properties, parameters are passed along with type checking
+```elm
+type User
+    = Activated Int
+    | Deleted (Int, String)
+    
+update state =
+  case state of
+    Activated value ->
+      -- do something with value
+    Deleted values ->
+      -- do something with values
+      
+update ( Activated 1 )
+update ( Deleted (0, "gone") )
 ```
 
 #### Let-in
@@ -542,7 +595,7 @@ in
 `let` helps simplify complex expressions
 ```elm
 let
-  activeUsers = List.filter (\u -> u.state /= 1) model.users
+  activeUsers = List.filter (\u -> u.state /= 1) model.users
 in
   { model | user = activeUsers}
 ```
