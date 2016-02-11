@@ -24,10 +24,11 @@
     * [Anonymous](#anonymous)
     * [Infix](#infix)
     * [Prefix](#prefix)
-9. [Union Types](#union-types)
+9. [Types](#types)
+    * [Union Types](#union-types)
     * [Maybe](#maybe)
-10. [Type Annotation](#type-annotation)
-11. [Type Aliases](#type-aliases)
+10. [Type Aliases](#type-aliases)
+11. [Type Annotation](#type-annotation)
 12. [Operators](#operators)
     * [Arithmetic](#arithmetic)
     * [Bitwise](#bitwise)
@@ -402,7 +403,8 @@ Functions that placed in front of arguments while enclosed in parentheses are ca
 "abcdefghij" : String
 ```
 
-## Union Types
+## Types
+#### Union Types
 Elm allows to create custom types known as _union types_.<br/>
 The expression below creates a type which can have one of the values (or _tags_) from the right. _Union types_ tightly coupled with [case-of](#case-of) statement.
 ```elm
@@ -441,6 +443,38 @@ getId id =
     Nothing
 ```
 
+## Type Aliases
+You can give existing types a custom name with `type alias`
+```elm
+type alias Name = String
+type alias Dob = String
+
+type alias Record = { name: Name, dob: Dob }
+```
+
+We can use it later annotating function
+```elm
+record : Record
+record =
+    { name = "Dave", dob = "27/08/1999 }
+```
+
+But still `type alias` equals to it's parent `type`
+```elm
+type alias Name = String
+
+name : Name
+name =
+  "Dave"
+
+secondName : String
+secondName =
+  "Dave"
+  
+-- True
+name == secondName
+```
+
 ## Type Annotation
 Elm, like most ML dialects, automatically infers most types.<br/>
 ```elm
@@ -466,11 +500,6 @@ coordinates =
     { x = 0,
       y = 0
     }    
-```
-
-## Type Aliases
-```elm
-
 ```
 
 ## Operators
