@@ -316,6 +316,13 @@ Also possible, put as many commas as you'll have values inside a tuple
 (1,True,'a',[]) : ( number, Bool, Char, List a )
 ```
 
+Destructuring
+```elm
+(x, y) = (1, 2)
+> x
+1 : number
+```
+
 #### Records
 Records are immutable. A `record` is a collection of key/value pairs, 
 similar to objects in JavaScript or dictionary in Python
@@ -344,6 +351,13 @@ Updating records returns a new record
 "Red" : String
 ```
 
+Destructuring
+
+```elm
+{ style, number, isCool } = myRecord
+> style
+"Blue" : String
+```
 ## Functions
 Basics
 ```elm
