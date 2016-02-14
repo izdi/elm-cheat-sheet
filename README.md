@@ -9,7 +9,8 @@
     * [REPL](#repl)
     * [Compile](#compile)
     * [Packaging](#packaging)
-    * [Publish](#publish)
+        * [Publish](#publish)
+        * [Documentation](#documentation)
 5. [HTML Embedding](#html-embedding)
 6. [Primitives](#primitives)
     * [Numbers](#numbers)
@@ -20,6 +21,7 @@
     * [Lists](#lists)
     * [Tuples](#tuples)
     * [Records](#records)
+    * [Other](#other)
 8. [Functions](#functions)
     * [Anonymous](#anonymous)
     * [Infix](#infix)
@@ -71,6 +73,8 @@ main =
 Multi-line comment  
 -}
 ```
+
+Comments for package [documentation](#documentation)
 
 ## Modules
 ```elm
@@ -159,6 +163,7 @@ $ elm make HelloWorld.elm --output hw.html
 #### Packaging
 `elm package` / `elm-package`
 
+Installation automatically adds `dependencies` in `package.json`.
 ```bash
 # Install a package
 $ elm-package install evancz/elm-html
@@ -177,19 +182,89 @@ This is a MINOR change.
         attributeNS : String -> String -> String -> VirtualDom.Property
 ```
 
+#### Documentation
+Publishing a package requires well documented code.
+
+```elm
+module Documentation 
+    ( Type
+    , value
+    , anyfinCanHappen
+    )
+    where
+    
+{-| Module level documentation 
+ 
+# Just a header, what to include below 
+@docs Type, value
+
+# About Anyfin
+@docs anyfinCanHappen
+
+-}
+
+import Random exposing (int)
+
+{-| Type level documentation comment -}
+type Type = Bool
+
+{-|-}
+-- Empty comment above
+value : Int
+value = 1 + 1
+
+{-| More on anyfinCanHappen -}
+anyfinCanHappen : Generator Int
+anyfinCanHappen = 
+    int 0 64
+    
+{-| This value is not exported, so isn't required -}
+-- Use basic comment syntax
+imNotExported =
+    "Don't need to comment me"
+```
+
+* Documentation comment starts `{-|` ends with `-}`
+* Module documentation comes after module declaration, before the imports
+* Functions are grouped into related sections by keyword `@docs <args>` and declared with Markdown
+* Each exported entity should have documentation comment on top of its declaration 
+
 #### Publish
-Versioning matters.<br/>
-`MAJOR.MINOR.PATCH`
+Add `README.md` otherwise publishing will fail<br/>
+All packages start with initial version `1.0.0`<br/>
+Versions all have exactly three parts: `MAJOR.MINOR.PATCH`<br/>
 * `PATCH` - the API is the same, no risk of breaking code
 * `MINOR` - values have been added, existing values are unchanged
 * `MAJOR` - existing values have been changed or removed
 
 `elm-package.json`
 * `source-directories` - array of directories to look up for project source code inside the working directory
-* `exposed-modules` - array of directories to expose publishing modules that are not meant for users
+* `exposed-modules` - modules that exposed to a user after publishing, kind of interface to your internal API.
 
-Publishing a package requires well documented code.
+```bash
+# elm-package.json
+source-directories": [
+    ".",
+    "SubmoduleOne",
+    "SubmoduleThree"
+]
+"exposed-modules": [
+    "SubmoduleOne"
+]
 
+├── SubmoduleOne
+│   └── SubOne.elm        # Compiled and published
+├── SubmoduleTwo
+│   └── SubTwo.elm        # Compiled, but unexposed
+├── SubmoduleThree
+│   └── SubThree.elm      # Compiler won't see source, unexposed to the users 
+├── README.md
+├── elm-package.json
+├── Goodmodule.elm
+└── Module.elm
+```
+
+Publish
 ```bash
 $ git tag -a 1.0.0 -m "initial release"
 $ git push --tags
@@ -197,9 +272,14 @@ $ git push --tags
 $ elm-package publish
 ```
 
-Update a package
+Updating
 ```bash
 $ elm-package bump
+
+$ git tag -a 1.0.1 -m "secondary release"
+$ git push --tags
+
+$ elm-package publish
 ```
 
 ## HTML Embedding
@@ -352,12 +432,18 @@ Updating records returns a new record
 ```
 
 Destructuring
-
 ```elm
 { style, number, isCool } = myRecord
 > style
 "Blue" : String
 ```
+
+#### Other
+Core library also has:
+ * [Array](http://package.elm-lang.org/packages/elm-lang/core/3.0.0/Array)
+ * [Dict](http://package.elm-lang.org/packages/elm-lang/core/3.0.0/Dict)
+ * [Set](http://package.elm-lang.org/packages/elm-lang/core/3.0.0/Set)
+
 ## Functions
 Basics
 ```elm
@@ -425,7 +511,7 @@ The expression below creates a type which can have one of the values (or _tags_)
 type Movement = Right | Left | Stop 
 ```
 
-Tags bring additional information
+Tags bring additional information, after tag itself comes a type or multiple types.
 ```elm
 type Movement 
     = Right Int 
@@ -435,6 +521,15 @@ type Movement
     
 -- passing to the function
 myFunction ( Coordinates (45.7, 67.5) )
+```
+
+_Union types_ can also have type variables
+```elm
+type Person a
+  = Name String
+  | Surname String
+  | Age Int
+  | About a
 ```
 
 #### Maybe
@@ -567,6 +662,7 @@ In a nutshell Elm operators are _functions_.
 |--------|-----------|----------|
 |`++`|put appendable things together|`appendable -> appendable -> appendable`|
 |`::`|add an element to the front of a list|`a -> List a -> List a`|
+|`as`|keyword that creates aliases for values `(x, y) as t == t = (x, y)`|`a -> a`|
 
 ## Control statements
 #### If
