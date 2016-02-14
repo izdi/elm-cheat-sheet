@@ -254,11 +254,11 @@ source-directories": [
     "Module"
 ]
 
-├── SubmoduleOne
+├── SubOne
 │   └── SubOne.elm        # Compiled and exposed
-├── SubmoduleTwo
+├── SubOne
 │   └── SubTwo.elm        # Compiled, but unexposed
-├── SubmoduleThree
+├── SubOne
 │   └── SubThree.elm      # Compiler won't see the source, unexposed to the users 
 ├── README.md
 ├── elm-package.json
