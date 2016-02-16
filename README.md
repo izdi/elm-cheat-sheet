@@ -468,7 +468,7 @@ myFunction arg1 arg2
 <function> : number -> number -> number
 > minus1 = minus 1
 <function> : number -> number
-> minus 11
+> minus1 11
 -10 : number
 ```
 
