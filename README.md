@@ -508,7 +508,7 @@ Functions that placed in front of arguments while enclosed in parentheses are ca
 ## Types
 #### Union Types
 Elm allows to create custom types known as _union types_.<br/>
-The expression below creates a type which can have one of the values (or _tags_) from the right. _Union types_ tightly coupled with [case-of](#case-of) statement.
+The expression below creates a type which can have one of the values (or _tags_) from the right. _Union types_ are tightly coupled with [case-of](#case-of) statement.
 ```elm
 type Movement = Right | Left | Stop 
 ```
