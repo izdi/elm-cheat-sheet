@@ -42,6 +42,7 @@
     * [If](#if)    
     * [Case-of](#case-of)
     * [Let-in](#let-in)
+14. [Ports](#ports)
 
 ## Elm in a nutshell
  - purely functional language
@@ -145,7 +146,7 @@ Backslash `\` is for multi-line expressions
 
 ```bash
 # Default compilation 
-elm make HelloWorld.elm -> elm.js
+elm make HelloWorld.elm -> index.html
 
 # Custom name
 $ elm make HelloWorld.elm --output hw.js
@@ -740,3 +741,48 @@ let
 in
   { model | user = activeUsers}
 ```
+
+## Ports
+Ports are a general purpose way to communicate with JavaScript.
+
+#### From JavaScript to Elm
+```elm
+-- define port
+port portName : Signal String
+```
+
+```javascript
+var main = Elm.embed(Elm.Main, div, { portName: "Initial Value" });
+
+// send into port
+main.ports.portName.send("Port value");
+```
+
+#### From Elm to JavaScript
+```elm
+port showPortName : Signal String
+port showPortName : =
+    portName
+```
+
+```javascript
+function logName(name) {
+    console.log(name);
+}
+
+// subscribe to receive events
+main.ports.showPortName.subscribe(logName);
+
+// unsubscribe
+main.ports.showPortName.unsubscribe(logName);
+```
+
+#### Type interoperability
+|JavaScript|Elm|
+|----------|---|
+|Booleans|Bool|
+|Strings|Char, String|
+|Arrays|List, Array, Tuples (fixed-length)|
+|Objects|Records|
+|Events|Signals|
+|null|Maybe Nothing|
