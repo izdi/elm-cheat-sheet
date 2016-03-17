@@ -386,7 +386,7 @@ Ways to create a list
 ```
 
 #### Tuples
-Tuples package two or more expressions into a single expression. 
+Tuples package two or more (up to nine) expressions into a single expression. 
 The type of a tuple records the number of components and each of their types.
 ```elm
 > (1, "2", True)
