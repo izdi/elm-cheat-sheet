@@ -650,7 +650,7 @@ In a nutshell Elm operators are _functions_.
 |--------|-----------|----------|
 |`&&`|logical and|`Bool -> Bool -> Bool`
 |`||`|logical or|`Bool -> Bool -> Bool`
-|`not`|logical not|`Bool`
+|`not`|logical not|`Bool -> Bool`
 
 #### Function Composition
 |Operator|Description|Type hint|
