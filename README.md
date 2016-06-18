@@ -1,4 +1,4 @@
-# <img src="http://elm-lang.org/logo.svg" width="26"> Elm Cheat Sheet
+# <img src="http://elm-lang.org/assets/logo.svg" width="26"> Elm Cheat Sheet
 
 ## Table of Contents
 1. [Hello World](#hello-world)
