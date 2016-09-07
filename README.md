@@ -257,9 +257,9 @@ source-directories": [
 
 ├── SubOne
 │   └── SubOne.elm        # Compiled and exposed
-├── SubOne
+├── SubTwo
 │   └── SubTwo.elm        # Compiled, but unexposed
-├── SubOne
+├── SubThree
 │   └── SubThree.elm      # Compiler won't see the source, unexposed to the users 
 ├── README.md
 ├── elm-package.json
