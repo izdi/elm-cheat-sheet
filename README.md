@@ -24,7 +24,6 @@
     * [Other](#other)
 8. [Functions](#functions)
     * [Anonymous](#anonymous)
-    * [Infix](#infix)
     * [Prefix](#prefix)
 9. [Types](#types)
     * [Union Types](#union-types)
@@ -39,7 +38,7 @@
     * [Function Composition](#function-composition)
     * [Other](#other)
 13. [Control Statements](#control-statements)
-    * [If](#if)    
+    * [If](#if)
     * [Case-of](#case-of)
     * [Let-in](#let-in)
 14. [Ports](#ports)
@@ -51,10 +50,10 @@
  - outperforms most popular rendering libraries
  - package manager
  - built-in tooling
- - HTML, CSS, JavaScript interoperability 
+ - HTML, CSS, JavaScript interoperability
  - clean syntax
  - I like frontend again...
- 
+
 ## Hello World
 File `HelloWorld.elm`:
 ```elm
@@ -71,7 +70,7 @@ main =
 -- Single line comment
 
 {-
-Multi-line comment  
+Multi-line comment
 -}
 ```
 
@@ -79,18 +78,18 @@ Comments for package [documentation](#documentation)
 
 ## Modules
 ```elm
--- Defining a module, exports everything by default
-module Mymodule where
+-- Defining a module that exports everything
+module Mymodule exposing (..)
 
 -- Export only specified entities
-module Mymodule (Type, value) where
+module Mymodule exposing (Type, value)
 
 -- Export all or specific states of type
-module Mymodule 
+module Mymodule exposing
     ( Error(Forbidden, Timeout)
     , Stuff(..)
-    ) where
-    
+    )
+
 type Error
     = Forbidden String
     | Timeout String
@@ -187,16 +186,15 @@ This is a MINOR change.
 Publishing a package requires well documented code.
 
 ```elm
-module Documentation 
+module Documentation exposing
     ( Type
     , value
     , anyfinCanHappen
     )
-    where
-    
-{-| Module level documentation 
- 
-# Just a header, what to include below 
+
+{-| Module level documentation
+
+# Just a header, what to include below
 @docs Type, value
 
 # About Anyfin
@@ -216,9 +214,9 @@ value = 1 + 1
 
 {-| More on anyfinCanHappen -}
 anyfinCanHappen : Generator Int
-anyfinCanHappen = 
+anyfinCanHappen =
     int 0 64
-    
+
 {-| This value is not exported, so isn't required -}
 -- Use basic comment syntax
 imNotExported =
@@ -228,7 +226,7 @@ imNotExported =
 * Documentation comment starts `{-|` ends with `-}`
 * Module documentation comes after module declaration, before the imports
 * Functions are grouped into related sections by keyword `@docs <args>` and declared with Markdown
-* Each exported entity should have documentation comment on top of its declaration 
+* Each exported entity should have documentation comment on top of its declaration
 
 #### Publish
 Add `README.md` otherwise publishing will fail<br/>
@@ -260,10 +258,10 @@ source-directories": [
 ├── SubTwo
 │   └── SubTwo.elm        # Compiled, but unexposed
 ├── SubThree
-│   └── SubThree.elm      # Compiler won't see the source, unexposed to the users 
+│   └── SubThree.elm      # Compiler won't see the source, unexposed to the users
 ├── README.md
 ├── elm-package.json
-├── Goodmodule.elm        # Compiled and exposed  
+├── Goodmodule.elm        # Compiled and exposed
 └── Module.elm            # Compiled and exposed
 ```
 
@@ -291,7 +289,7 @@ Running fullscreen
 ```html
 <script type="text/javascript" src="elm.js"></script>
 <script type="text/javascript">
-    Elm.fullscreen(Elm.HelloWorld);
+    Elm.Main.fullscreen();
 </script>
 ```
 
@@ -300,19 +298,19 @@ Embed explicitly in a html element
 <script type="text/javascript" src="elm.js"></script>
 <script type="text/javascript">
     var elmHolder = document.getElementById('hw-wrapper');
-    
-    Elm.embed(Elm.HelloWorld, elmHolder);
+
+    Elm.Main.embed(elmHolder);
 </script>
 ```
 
 Run without graphics
 ```javascript
-Elm.worker(Elm.HelloWorld);
+Elm.Main.worker();
 ```
 
 ## Primitives
 #### Numbers
-Numeric types are `number` and `Float`, `number` represents both `Int` and `Float`:
+Numeric types are `Int` and `Float`, `number` represents both `Int` and `Float`:
 ```elm
 > 1
 1 : number
@@ -325,7 +323,7 @@ Numeric types are `number` and `Float`, `number` represents both `Int` and `Floa
 ```
 
 #### Strings
-String types are `char` and `String`
+String types are `Char` and `String`
 ```elm
 > 'a'
 'a' : Char
@@ -358,13 +356,15 @@ False : Bool
 ```
 
 #### Other
-`comparable` - `ints`, `floats`, `chars`, `strings`, `lists`, `tuples` 
+`comparable` - `ints`, `floats`, `chars`, `strings`, `lists`, `tuples`
 <br/>
 `appendable` - `strings`, `lists`, `text`.
 <br/>
 Kind of dynamic types are represented as `a`, `b`, `c` etc. meaning that you can pass any value, even functions
 
 ## Collections
+All values and data structures in Elm are immutable.
+
 #### Lists
 A `list` holds a collection of related values separated by commas and enclosed in
 square brackets. All the values in a list must have the same type:
@@ -379,21 +379,22 @@ square brackets. All the values in a list must have the same type:
 
 Ways to create a list
 ```elm
-> [1..4]
+> List.range 1 4
 > [1,2,3,4]
 > 1 :: [2,3,4]
 > 1 :: 2 :: 3 :: 4 :: []
 ```
 
 #### Tuples
-Tuples package two or more expressions into a single expression. 
+Tuples package many expressions into a single expression.
+They have a minumum of two elements and maximum of nine.
 The type of a tuple records the number of components and each of their types.
 ```elm
 > (1, "2", True)
 (1,"2",True) : ( number, String, Bool )
 ```
 
-Also possible, put as many commas as you'll have values inside a tuple
+It's also possible to use commas as a tuple function, like a [prefix operation](#prefix).
 ```elm
 > (,,,) 1 True 'a' []
 (1,True,'a',[]) : ( number, Bool, Char, List a )
@@ -407,13 +408,13 @@ Destructuring
 ```
 
 #### Records
-Records are immutable. A `record` is a collection of key/value pairs, 
+A `record` is a collection of key/value pairs,
 similar to objects in JavaScript or dictionary in Python
 ```elm
-myRecord = 
+myRecord =
  { style = "Blue",
-   number = 1, 
-   isCool = True 
+   number = 1,
+   isCool = True
  }
 ```
 
@@ -458,7 +459,7 @@ sum (a, b) = a + b
 ```
 
 All functions in Elm are _curried_ by default.<br/>
-If you have a function of 2 arguments, it takes one argument and returns a function that takes another argument:
+If you have "a function of 2 arguments", it's really a function that takes one argument and returns a function that takes another argument:
 ```elm
 -- Both are equal
 myFunction arg1 arg2
@@ -482,26 +483,14 @@ Also known as _lambdas_
 (\x y -> x * y)
 ```
 
-#### Infix
-Functions that placed between two arguments and enclosed in backticks <code>`</code> are called _infix_ 
-```elm
--- Normal
-> min 1 2
-1 : number
-
--- Infix
-> 1 `min` 2
-1 : number
-```
-
 #### Prefix
-Functions that placed in front of arguments while enclosed in parentheses are called _prefix_
+_Prefix_ notation is when we use [operators](#operators) as regular functions by enclosing them in parentheses.
 ```elm
 -- Normally you would do this
 > "abcde" ++ "fghij"
 "abcdefghij" : String
 
--- Prefix 
+-- Prefix
 > (++) "abcde" "fghij"
 "abcdefghij" : String
 ```
@@ -511,17 +500,17 @@ Functions that placed in front of arguments while enclosed in parentheses are ca
 Elm allows to create custom types known as _union types_.<br/>
 The expression below creates a type which can have one of the values (or _tags_) from the right. _Union types_ tightly coupled with [case-of](#case-of) statement.
 ```elm
-type Movement = Right | Left | Stop 
+type Movement = Right | Left | Stop
 ```
 
 Tags bring additional information, after tag itself comes a type or multiple types.
 ```elm
-type Movement 
-    = Right Int 
+type Movement
+    = Right Int
     | Left Int
     | Stop Bool
     | Coordinates (Float, Float)
-    
+
 -- passing to the function
 myFunction ( Coordinates (45.7, 67.5) )
 ```
@@ -536,7 +525,7 @@ type Person a
 ```
 
 #### Maybe
-A `Maybe` can help you with optional arguments, error handling, and records with optional fields. Think of it as a kind of`null`
+A `Maybe` can help you with optional arguments, error handling, and records with optional fields. Think of it as a kind of `null`
 ```elm
 -- Maybe resides in a module
 import Maybe exposing ( Maybe(..) )
@@ -582,7 +571,7 @@ name =
 secondName : String
 secondName =
   "Dave"
-  
+
 -- True
 name == secondName
 ```
@@ -608,14 +597,14 @@ multiply {x,y} =
 Annotating records
 ```elm
 coordinates : { x : Float, y : Float }
-coordinates = 
+coordinates =
     { x = 0,
       y = 0
-    }    
+    }
 ```
 
 ## Operators
-In a nutshell Elm operators are _functions_.
+In a nutshell Elm operators are _functions_ that take two arguments.
 
 #### Arithmetic
 |Operator|Description|Type hint|
@@ -671,21 +660,21 @@ In a nutshell Elm operators are _functions_.
 #### If
 All the branches of an if need to match so that no matter which one we take, we get back the same type of value overall.
 ```elm
-if a < 1 then 
-    "It's zero" 
-else 
+if a < 1 then
+    "It's zero"
+else
     "Non-zero"
 
 -- Multi-line.
 if y > 0 then
-    "Greater"   
+    "Greater"
 else if x /= 0 then
     "Not equals"
 else
     "silence"
-```    
+```
 
-Elm does not have the notion of “truthiness”.<br/> 
+Elm does not have the notion of “truthiness”.<br/>
 The condition must evaluate to True or False, and nothing else.
 ```elm
 > if 1 then "nope" else "nope again"
@@ -712,14 +701,14 @@ In case of passing tags with additional properties, parameters are passed along 
 type User
     = Activated Int
     | Deleted (Int, String)
-    
+
 update state =
   case state of
     Activated value ->
       -- do something with value
     Deleted values ->
       -- do something with values
-      
+
 update ( Activated 1 )
 update ( Deleted (0, "gone") )
 ```
@@ -747,12 +736,15 @@ Ports are a general purpose way to communicate with JavaScript.
 
 #### From JavaScript to Elm
 ```elm
+-- declare that this module uses ports
+port module Main exposing (..)
+
 -- define port
-port portName : Signal String
+port portName : (String -> msg) -> Sub msg
 ```
 
 ```javascript
-var main = Elm.embed(Elm.Main, div, { portName: "Initial Value" });
+var main = Elm.Main.embed(div);
 
 // send into port
 main.ports.portName.send("Port value");
@@ -760,9 +752,7 @@ main.ports.portName.send("Port value");
 
 #### From Elm to JavaScript
 ```elm
-port showPortName : Signal String
-port showPortName : =
-    portName
+port showPortName : String -> Cmd msg
 ```
 
 ```javascript
@@ -781,8 +771,9 @@ main.ports.showPortName.unsubscribe(logName);
 |JavaScript|Elm|
 |----------|---|
 |Booleans|Bool|
+|Numbers|Int, Float|
 |Strings|Char, String|
 |Arrays|List, Array, Tuples (fixed-length)|
 |Objects|Records|
-|Events|Signals|
+|JSON|[Json.Encode.Value](http://package.elm-lang.org/packages/elm-lang/core/latest/Json-Encode#Value)|
 |null|Maybe Nothing|
