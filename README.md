@@ -557,7 +557,7 @@ We can use it later annotating function
 ```elm
 record : Record
 record =
-    { name = "Dave", dob = "27/08/1999 }
+    { name = "Dave", dob = "27/08/1999" }
 ```
 
 But still `type alias` equals to it's parent `type`
