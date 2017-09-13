@@ -444,9 +444,9 @@ Destructuring
 
 #### Other
 Core library also has:
- * [Array](http://package.elm-lang.org/packages/elm-lang/core/3.0.0/Array)
- * [Dict](http://package.elm-lang.org/packages/elm-lang/core/3.0.0/Dict)
- * [Set](http://package.elm-lang.org/packages/elm-lang/core/3.0.0/Set)
+ * [Array](http://package.elm-lang.org/packages/elm-lang/core/latest/Array)
+ * [Dict](http://package.elm-lang.org/packages/elm-lang/core/latest/Dict)
+ * [Set](http://package.elm-lang.org/packages/elm-lang/core/latest/Set)
 
 ## Functions
 Basics
