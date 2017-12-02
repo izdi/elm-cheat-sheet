@@ -442,6 +442,42 @@ Destructuring
 "Blue" : String
 ```
 
+Extensible records
+
+```elm
+-- good usecase for extensible records is to ge able to compose records and to be able to  define functions that work on different kinds of records
+
+-- define a type of record that has some properties and could have other properties
+
+type alias Mammal r = {
+   r | legs : Int
+}
+
+-- cat is an example of extending the record Mammal by adding properties name and ageInHumanYears
+
+cat : Mammal
+    { name : String
+    , ageInHumanYears = 13
+    }
+
+cat =
+  { name = "Mittens"
+  , ageInHumanYears = 13
+  , legs = 4
+  }
+```
+
+```elm
+-- mutate is a function that can work on any Mammal
+
+mutate : Mammal r -> Mammal r
+mutate mammal =
+    { mammal | legs = mammal.legs + 1 }
+
+mutatedCat = mutate cat
+mutatedCat.legs == 5
+```
+
 #### Other
 Core library also has:
  * [Array](http://package.elm-lang.org/packages/elm-lang/core/latest/Array)
