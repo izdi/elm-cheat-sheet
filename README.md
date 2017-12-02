@@ -445,7 +445,7 @@ Destructuring
 Extensible records
 
 ```elm
--- good usecase for extensible records is to ge able to compose records and to be able to  define functions that work on different kinds of records
+-- good usecase for extensible records is to be able to compose records and to be able to define functions that work on different kinds of records
 
 -- define a type of record that has some properties and could have other properties
 
